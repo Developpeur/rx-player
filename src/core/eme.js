@@ -16,7 +16,6 @@
 
 var _ = require("canal-js-utils/misc");
 var log = require("canal-js-utils/log");
-var Promise_ = require("canal-js-utils/promise");
 var assert = require("canal-js-utils/assert");
 var { bytesToHex } = require("canal-js-utils/bytes");
 var { Observable } = require("canal-js-utils/rx");
@@ -74,7 +73,7 @@ var $sessionsStore = (function() {
 })();
 
 var cachedKeySystemAccess = {
-  createMediaKeys: () => Promise_.resolve($mediaKeys)
+  createMediaKeys: () => Promise.resolve($mediaKeys)
 };
 
 function findCompatibleKeySystem(keySystems) {
@@ -85,7 +84,7 @@ function findCompatibleKeySystem(keySystems) {
   if ($keySystem && $mediaKeys && !$mediaKeys.alwaysRenew) {
     var foundKeySystem = _.find(keySystems, ({ type }) => (type == $keySystem));
     if (foundKeySystem) {
-      return Promise_.resolve({
+      return Promise.resolve({
         keySystem: foundKeySystem,
         keySystemAccess: cachedKeySystemAccess
       });
@@ -111,7 +110,7 @@ function findCompatibleKeySystem(keySystems) {
       );
   }
 
-  return new Promise_((res, rej) => testKeySystem(0, res, rej));
+  return new Promise((res, rej) => testKeySystem(0, res, rej));
 }
 
 function createAndSetMediaKeys(video, keySystem, keySystemAccess) {

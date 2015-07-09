@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-var Promise_ = require("canal-js-utils/promise");
-
 var _ = require("canal-js-utils/misc");
 var log = require("canal-js-utils/log");
 var { CompositeDisposable, BehaviorSubject, Observable, Subject } = require("canal-js-utils/rx");
@@ -525,7 +523,7 @@ class Player extends EventEmitter {
   }
 
   setPlaybackRate(rate) {
-    return new Promise_(res => res(this.video.playbackRate = rate));
+    return new Promise(res => res(this.video.playbackRate = rate));
   }
 
   goToStart() {
@@ -533,7 +531,7 @@ class Player extends EventEmitter {
   }
 
   seekTo(time) {
-    return new Promise_(res => {
+    return new Promise(res => {
       assert(this.man);
       var currentTs = this.video.currentTime;
       if (this.man.isLive) time = fromWallClockTime(time, this.man);
@@ -572,7 +570,7 @@ class Player extends EventEmitter {
 
   setLanguage(lng) {
     // TODO(pierre): proper promise
-    return new Promise_(res => {
+    return new Promise(res => {
       assert(_.contains(this.getAvailableLanguages(), lng), "player: unknown language");
       res(this.adaptive.setLanguage(lng));
     });
@@ -580,7 +578,7 @@ class Player extends EventEmitter {
 
   setSubtitle(sub) {
     // TODO(pierre): proper promise
-    return new Promise_(res => {
+    return new Promise(res => {
       assert(!sub || _.contains(this.getAvailableSubtitles(), sub), "player: unknown subtitle");
       res(this.adaptive.setSubtitle(sub || ""));
     })
@@ -592,7 +590,7 @@ class Player extends EventEmitter {
 
   setVideoBitrate(btr) {
     // TODO(pierre): proper promise
-    return new Promise_(res => {
+    return new Promise(res => {
       assert(btr === 0 || _.contains(this.getAvailableVideoBitrates(), btr), "player: video bitrate unavailable");
       res(this.adaptive.setVideoBitrate(btr));
     });
@@ -600,7 +598,7 @@ class Player extends EventEmitter {
 
   setAudioBitrate(btr) {
     // TODO(pierre): proper promise
-    return new Promise_(res => {
+    return new Promise(res => {
       assert(btr === 0 || _.contains(this.getAvailableAudioBitrates(), btr), "player: audio bitrate unavailable");
       res(this.adaptive.setAudioBitrate(btr));
     });
@@ -608,26 +606,26 @@ class Player extends EventEmitter {
 
   setVideoMaxBitrate(btr) {
     // TODO(pierre): proper promise
-    return new Promise_(res => {
+    return new Promise(res => {
       res(this.adaptive.setVideoMaxBitrate(btr));
     });
   }
 
   setAudioMaxBitrate(btr) {
     // TODO(pierre): proper promise
-    return new Promise_(res => {
+    return new Promise(res => {
       res(this.adaptive.setAudioMaxBitrate(btr));
     });
   }
 
   setVideoBufferSize(size) {
     // TODO(pierre): proper promise
-    return new Promise_(res => res(this.adaptive.setVideoBufferSize(size)));
+    return new Promise(res => res(this.adaptive.setVideoBufferSize(size)));
   }
 
   setAudioBufferSize(size) {
     // TODO(pierre): proper promise
-    return new Promise_(res => res(this.adaptive.setAudioBufferSize(size)));
+    return new Promise(res => res(this.adaptive.setAudioBufferSize(size)));
   }
 
   getStreamObservable() {

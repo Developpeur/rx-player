@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-var Promise_ = require("canal-js-utils/promise");
 var _ = require("canal-js-utils/misc");
 var assert = require("canal-js-utils/assert");
 var EventEmitter = require("canal-js-utils/eventemitter");
@@ -46,7 +45,7 @@ AbstractSourceBuffer.prototype = _.extend({}, EventEmitter.prototype, {
     assert(!this.updating, "text-buffer: cannot remove while updating");
     this.updating = true;
     this.trigger("updatestart");
-    return new Promise_(res => res(func()))
+    return new Promise(res => res(func()))
       .then(
         ()  => this._unlock("update"),
         (e) => this._unlock("error", e)
@@ -103,7 +102,7 @@ TextSourceBuffer.prototype = _.extend({}, AbstractSourceBuffer.prototype, {
       }
     };
 
-    return new Promise_((resolve) => {
+    return new Promise((resolve) => {
       var blob = new Blob([vtt], { type: "text/vtt" });
       var url = URL.createObjectURL(blob);
       trackElement = document.createElement("track");
@@ -137,7 +136,7 @@ TextSourceBuffer.prototype = _.extend({}, AbstractSourceBuffer.prototype, {
   },
 
   _append(cues) {
-    return Promise_.resolve((this.isVTT)
+    return Promise.resolve((this.isVTT)
       ? this.createCuesFromVTT(cues)
       : this.createCuesFromArray(cues))
     .then((trackCues) => {

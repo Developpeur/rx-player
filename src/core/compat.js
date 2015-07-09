@@ -16,7 +16,6 @@
 
 var _ = require("canal-js-utils/misc");
 var log = require("canal-js-utils/log");
-var Promise_ = require("canal-js-utils/promise");
 var EventEmitter = require("canal-js-utils/eventemitter");
 var { bytesToStr, strToBytes } = require("canal-js-utils/bytes");
 var assert = require("canal-js-utils/assert");
@@ -59,7 +58,7 @@ function castToPromise(prom) {
   if (prom && typeof prom.then == "function") {
     return prom;
   } else {
-    return Promise_.resolve(prom);
+    return Promise.resolve(prom);
   }
 }
 
@@ -69,7 +68,7 @@ function wrap(fn) {
     try {
       retValue = fn.apply(this, arguments);
     } catch(error) {
-      return Promise_.reject(error);
+      return Promise.reject(error);
     }
     return castToPromise(retValue);
   };
@@ -103,7 +102,7 @@ function wrapUpdateWithPromise(memUpdate, sessionObj) {
       memUpdate.call(this, license, sessionId);
       return merge(keys, errs).take(1).toPromise();
     } catch(e) {
-      return Promise_.reject(e);
+      return Promise.reject(e);
     }
   };
 }
@@ -254,11 +253,11 @@ if (!requestMediaKeySystemAccess && HTMLVideoElement_.prototype.webkitGenerateKe
 
   requestMediaKeySystemAccess = function(keyType) {
     if (!isTypeSupported(keyType))
-      return Promise_.reject();
+      return Promise.reject();
 
-    return Promise_.resolve({
+    return Promise.resolve({
       createMediaKeys() {
-        return Promise_.resolve(new MockMediaKeys(keyType));
+        return Promise.resolve(new MockMediaKeys(keyType));
       }
     });
   };
@@ -310,11 +309,11 @@ else if (MediaKeys_ && !requestMediaKeySystemAccess) {
 
   requestMediaKeySystemAccess = function(keyType) {
     if (!MediaKeys_.isTypeSupported(keyType))
-      return Promise_.reject();
+      return Promise.reject();
 
-    return Promise_.resolve({
+    return Promise.resolve({
       createMediaKeys() {
-        return Promise_.resolve(new MediaKeys_(keyType));
+        return Promise.resolve(new MediaKeys_(keyType));
       }
     });
   };
